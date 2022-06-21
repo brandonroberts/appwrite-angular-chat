@@ -1,12 +1,29 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { AppComponent } from './app/app.component';
 
-import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(
+      RouterModule.forRoot([
+        {
+          path: 'chat',
+          loadComponent: () =>
+            import('./app/chat.component').then((m) => m.ChatComponent),
+        },
+        {
+          path: '',
+          loadComponent: () =>
+            import('./app/login.component').then((m) => m.LoginComponent),
+        },
+      ])
+    ),
+  ],
+});
