@@ -1,5 +1,5 @@
 import { Service } from '../service';
-import { AppwriteException } from '../client';
+import { AppwriteException, Client } from '../client';
 import type { Models } from '../models';
 import type { UploadProgress } from '../client';
 

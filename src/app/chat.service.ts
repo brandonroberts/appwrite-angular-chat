@@ -25,7 +25,6 @@ export class ChatService {
   loadMessages() {
     this.appwriteAPI.database
       .listDocuments<Message>(
-        this.appwriteEnvironment.databaseId,
         this.appwriteEnvironment.chatCollectionId,
         [],
         100,
@@ -51,7 +50,6 @@ export class ChatService {
         };
 
         return this.appwriteAPI.database.createDocument(
-          this.appwriteEnvironment.databaseId,
           this.appwriteEnvironment.chatCollectionId,
           'unique()',
           data,

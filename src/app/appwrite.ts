@@ -36,7 +36,7 @@ export const AppwriteApi = new InjectionToken<{
     appwrite.setEndpoint(env.endpoint);
     appwrite.setProject(env.projectId);
 
-    const database = new Databases(appwrite);
+    const database = new Databases(appwrite, env.databaseId);
     const account = new Account(appwrite);
 
     return { database, account };

@@ -6,5 +6,5 @@ export { Functions } from './services/functions';
 export { Locale } from './services/locale';
 export { Storage } from './services/storage';
 export { Teams } from './services/teams';
-export type { Models, Payload, RealtimeResponseEvent } from './client';
+export type { Models, Payload, RealtimeResponseEvent, UploadProgress } from './client';
 export type { QueryTypes, QueryTypesList } from './query';
