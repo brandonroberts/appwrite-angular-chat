@@ -47,7 +47,7 @@ export class ChatService {
       concatMap((user) => {
         const data = {
           user: user!.name,
-          message
+          message,
         };
 
         return this.appwriteAPI.database.createDocument(
@@ -66,7 +66,11 @@ export class ChatService {
     return this.appwriteAPI.database.client.subscribe(
       `databases.${this.appwriteEnvironment.databaseId}.collections.${this.appwriteEnvironment.chatCollectionId}.documents`,
       (res: RealtimeResponseEvent<Message>) => {
-        if (res.events.includes(`databases.${this.appwriteEnvironment.databaseId}.collections.messages.documents.*.create`)) {
+        if (
+          res.events.includes(
+            `databases.${this.appwriteEnvironment.databaseId}.collections.messages.documents.*.create`
+          )
+        ) {
           const messages: Message[] = [...this._messages$.value, res.payload];
 
           this._messages$.next(messages);
