@@ -3,8 +3,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tap } from 'rxjs';
 
-import { AuthService } from './auth.service';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -125,20 +123,11 @@ export class LoginComponent {
   });
 
   constructor(
-    private authService: AuthService,
     private router: Router
   ) {}
 
   login() {
     const name = this.form.controls.name.value;
 
-    this.authService
-      .login(name)
-      .pipe(
-        tap(() => {
-          this.router.navigate(['/chat']);
-        })
-      )
-      .subscribe();
   }
 }

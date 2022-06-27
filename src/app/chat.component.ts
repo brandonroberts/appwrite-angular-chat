@@ -1,10 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { tap } from 'rxjs';
-
-import { ChatService } from './chat.service';
-import { AuthService } from './auth.service';
+import { Observable } from 'rxjs';
+import { of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
@@ -205,41 +203,27 @@ import { AuthService } from './auth.service';
   ],
 })
 export class ChatComponent implements OnInit, OnDestroy {
-  messageunSubscribe!: () => void;
   form = new FormGroup({
     message: new FormControl('', { nonNullable: true }),
   });
-  user$ = this.authService.user$;
-  messages$ = this.chatService.messages$;
+  user$: Observable<{}> = of({});
+  messages$: Observable<any[]> = of([]);
 
   constructor(
-    private authService: AuthService,
-    private chatService: ChatService
   ) {}
 
   ngOnInit() {
-    this.chatService.loadMessages();
-    this.messageunSubscribe = this.chatService.listenToMessages();
+
   }
 
   ngOnDestroy() {
-    this.messageunSubscribe();
   }
 
   sendMessage() {
     const message = this.form.controls.message.value;
 
-    this.chatService
-      .sendMessage(message)
-      .pipe(
-        tap(() => {
-          this.form.reset();
-        })
-      )
-      .subscribe();
   }
 
   async logout() {
-    await this.authService.logout();
   }
 }

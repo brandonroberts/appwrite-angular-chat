@@ -3,10 +3,6 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  endpoint: 'http://localhost:8080/v1',
-  projectId: 'ngchat',
-  databaseId: 'chat',
-  chatCollectionId: 'messages',
   production: false
 };
 
