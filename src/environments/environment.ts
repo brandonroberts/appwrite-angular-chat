@@ -3,8 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  endpoint: 'https://demo.appwrite.io/v1',
+  endpoint: 'http://localhost:8080/v1',
   projectId: 'ngchat',
+  databaseId: 'chat',
   chatCollectionId: 'messages',
   production: false
 };

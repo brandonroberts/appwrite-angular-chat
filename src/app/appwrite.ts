@@ -1,10 +1,11 @@
 import { inject, InjectionToken } from '@angular/core';
-import { Appwrite } from 'appwrite';
+import { Account, Client as Appwrite, Databases } from 'appwrite';
 import { environment } from 'src/environments/environment';
 
 interface AppwriteConfig {
   endpoint: string;
   projectId: string;
+  databaseId: string;
   chatCollectionId: string;
 }
 
@@ -13,9 +14,10 @@ export const AppwriteEnvironment = new InjectionToken<AppwriteConfig>(
   {
     providedIn: 'root',
     factory() {
-      const { endpoint, projectId, chatCollectionId } = environment;
+      const { endpoint, projectId, databaseId, chatCollectionId } = environment;
       return {
         endpoint,
+        databaseId,
         projectId,
         chatCollectionId,
       };
@@ -23,7 +25,10 @@ export const AppwriteEnvironment = new InjectionToken<AppwriteConfig>(
   }
 );
 
-export const AppwriteApi = new InjectionToken<Appwrite>('Appwrite SDK', {
+export const AppwriteApi = new InjectionToken<{
+  database: Databases;
+  account: Account;
+}>('Appwrite SDK', {
   providedIn: 'root',
   factory() {
     const env = inject(AppwriteEnvironment);
@@ -31,6 +36,9 @@ export const AppwriteApi = new InjectionToken<Appwrite>('Appwrite SDK', {
     appwrite.setEndpoint(env.endpoint);
     appwrite.setProject(env.projectId);
 
-    return appwrite;
+    const database = new Databases(appwrite);
+    const account = new Account(appwrite);
+
+    return { database, account };
   },
 });

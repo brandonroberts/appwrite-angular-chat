@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 export type Message = Models.Document & {
   user: string;
   message: string;
-  created: string;
 };
 
 @Injectable({
@@ -26,6 +25,7 @@ export class ChatService {
   loadMessages() {
     this.appwriteAPI.database
       .listDocuments<Message>(
+        this.appwriteEnvironment.databaseId,
         this.appwriteEnvironment.chatCollectionId,
         [],
         100,
@@ -47,24 +47,26 @@ export class ChatService {
       concatMap((user) => {
         const data = {
           user: user!.name,
-          message,
-          created: new Date().toISOString(),
+          message
         };
 
-        return this.appwriteAPI.database.createDocument<Message>(
+        return this.appwriteAPI.database.createDocument(
+          this.appwriteEnvironment.databaseId,
           this.appwriteEnvironment.chatCollectionId,
           'unique()',
-          data
+          data,
+          ['role:all'],
+          [`user:${user!.$id}`]
         );
       })
     );
   }
 
   listenToMessages() {
-    return this.appwriteAPI.subscribe(
-      `collections.${this.appwriteEnvironment.chatCollectionId}.documents`,
+    return this.appwriteAPI.database.client.subscribe(
+      `databases.${this.appwriteEnvironment.databaseId}.collections.${this.appwriteEnvironment.chatCollectionId}.documents`,
       (res: RealtimeResponseEvent<Message>) => {
-        if (res.events.includes('collections.messages.documents.*.create')) {
+        if (res.events.includes(`databases.${this.appwriteEnvironment.databaseId}.collections.messages.documents.*.create`)) {
           const messages: Message[] = [...this._messages$.value, res.payload];
 
           this._messages$.next(messages);
