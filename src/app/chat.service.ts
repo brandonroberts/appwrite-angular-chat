@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
 
 export type Message = Models.Document & {
   user: string;
-  message: string;
+  messageText: string;
 };
 
 @Injectable({
@@ -46,7 +46,7 @@ export class ChatService {
       concatMap((user) => {
         const data = {
           user: user!.name,
-          message,
+          messageText: message,
         };
 
         return this.appwriteAPI.database.createDocument(

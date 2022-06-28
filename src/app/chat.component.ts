@@ -24,7 +24,7 @@ import { AuthService } from './auth.service';
           class="message"
         >
           <span class="name">{{ message.user }}:</span>
-          {{ message.message }}
+          {{ message.messageText }}
         </div>
       </div>
 
